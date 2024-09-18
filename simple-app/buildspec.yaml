@@ -3,23 +3,11 @@ version: 0.2
 phases:
   install:
     commands:
-      - echo "Installing Docker..."
-      - sudo apt-get update -y && sudo apt-get install -y docker.io
-      - sleep 10  # Wait for Docker to start
-      - docker --version || exit 1
-
-      - echo "Installing unzip..."
-      - sudo apt-get install -y unzip
-
-      - echo "Installing AWS CLI v2..."
-      - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-      - unzip awscliv2.zip
-      - sudo chmod +x ./aws/install  # Ensure the install script is executable
-      - sudo ./aws/install --debug || exit 1
-      - aws --version || exit 1  # Confirm successful installation of AWS CLI
-
-      - echo "Cleaning up installation files..."
-      - rm -rf awscliv2.zip aws
+      - echo "Installing dependencies..."
+      - sudo apt-get update -y
+      - sudo apt-get install -y unzip  # Install unzip if needed
+      - docker --version || { echo "Docker is not installed"; exit 1; }
+      - aws --version || { echo "AWS CLI is not installed"; exit 1; }
 
   pre_build:
     commands:
