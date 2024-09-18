@@ -32,7 +32,10 @@ phases:
     commands:
       - echo Pushing the Docker image to ECR...
       - docker tag moiz/project:latest 034362047502.dkr.ecr.us-east-1.amazonaws.com/moiz/project:latest
-      - docker push 034362047502.dkr.ecr.us-east-1.amazonaws.com/moiz/project:latest || exit 1
+      - echo Checking images before push...
+      - docker images || exit 1  # List images to confirm tagging
+      - echo Pushing image...
+      - docker push 034362047502.dkr.ecr.us-east-1.amazonaws.com/moiz/project:latest || { echo "Docker push failed"; exit 1; }
 
 artifacts:
   files:
