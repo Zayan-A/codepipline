@@ -4,23 +4,41 @@ phases:
   install:
     commands:
       - echo Installing Docker...
-      - yum update -y && yum install -y docker
+      - sudo yum update -y && sudo yum install -y docker
       - docker --version
+
+      - echo Installing AWS CLI...
+      # Install required dependencies
+      - sudo yum install -y unzip
+      # Download and install AWS CLI version 2
+      - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+      - unzip awscliv2.zip
+      - sudo ./aws/install
+      # Verify AWS CLI installation
+      - aws --version
+
   pre_build:
     commands:
+      - echo Configuring AWS CLI...
+      # Set AWS region (can be adjusted as per your region)
+      - aws configure set region us-east-1
+      # Optionally, configure AWS credentials using environment variables or CodeBuild settings
+
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 034362047502.dkr.ecr.us-east-1.amazonaws.com
       - echo Build started on `date`
+
   build:
     commands:
       - echo Building the Docker image...
       - docker build -t moiz/project simple-app/.
+
   post_build:
     commands:
       - echo Pushing the Docker image to ECR...
       - docker tag moiz/project:latest 034362047502.dkr.ecr.us-east-1.amazonaws.com/moiz/project:latest
       - docker push 034362047502.dkr.ecr.us-east-1.amazonaws.com/moiz/project:latest
+
 artifacts:
   files:
     - '**/*'
-  discard-paths: yes
