@@ -4,16 +4,14 @@ phases:
   install:
     commands:
       - echo "Installing Docker..."
-      - sudo apt-get update -y && sudo apt-get install -y docker.io  # Use docker.io for Ubuntu
-      - sudo systemctl start docker  # Ensure Docker service is running
+      - sudo apt-get update -y && sudo apt-get install -y docker.io
+      - sudo dockerd &  # Start Docker in the background directly
+      - sleep 10  # Wait for Docker to start
       - docker --version || exit 1  # Check Docker version to confirm installation
 
       - echo "Installing AWS CLI..."
-      - sudo apt-get install -y awscli  # Use awscli for Ubuntu
+      - sudo apt-get install -y awscli
       - aws --version || exit 1  # Check AWS CLI version to confirm installation
-
-      - echo "Checking Docker service status..."
-      - sudo systemctl status docker || echo "Docker service may not be running."
 
   pre_build:
     commands:
