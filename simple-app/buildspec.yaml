@@ -11,8 +11,15 @@ phases:
 
   pre_build:
     commands:
+      - echo "Ensuring Docker is running..."
+      - sudo systemctl start docker || true  # Start Docker if not running
+      - docker info || { echo "Docker is not running properly"; exit 1; }
+
       - echo "Configuring AWS CLI..."
       - aws configure set region us-east-1
+
+      - echo "Verifying ECR repository..."
+      - aws ecr describe-repositories --repository-names moiz/project --region us-east-1 || { echo "ECR repository not found"; exit 1; }
 
       - echo "Logging in to Amazon ECR..."
       - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 034362047502.dkr.ecr.us-east-1.amazonaws.com || exit 1
