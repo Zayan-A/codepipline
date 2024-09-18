@@ -5,12 +5,14 @@ phases:
     commands:
       - echo Installing Docker...
       - sudo yum update -y && sudo yum install -y docker
-      - sudo systemctl start docker  # Start Docker service if not running
-      - docker --version
+      - docker --version || exit 1  # Check Docker version to confirm installation
 
       - echo Installing AWS CLI...
       - sudo yum install -y aws-cli
-      - aws --version
+      - aws --version || exit 1  # Check AWS CLI version to confirm installation
+
+      - echo Checking Docker service status...
+      - sudo systemctl status docker || echo "Docker service may not be running."
 
   pre_build:
     commands:
@@ -24,7 +26,7 @@ phases:
   build:
     commands:
       - echo Building the Docker image...
-      - sudo docker build -t moiz/project simple-app/. || exit 1
+      - docker build -t moiz/project simple-app/. || exit 1
 
   post_build:
     commands:
