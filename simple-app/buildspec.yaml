@@ -5,7 +5,6 @@ phases:
     commands:
       - echo "Installing Docker..."
       - sudo apt-get update -y && sudo apt-get install -y docker.io
-      - sudo systemctl start docker
       - sleep 10  # Wait for Docker to start
       - docker --version
 
