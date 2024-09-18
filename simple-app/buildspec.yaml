@@ -8,7 +8,7 @@ phases:
       - docker --version || exit 1  # Check Docker version to confirm installation
 
       - echo Installing AWS CLI...
-      - sudo apt-get install -y aws-cli
+      - sudo apt-get install aws-cli -y
       - aws --version || exit 1  # Check AWS CLI version to confirm installation
 
       - echo Checking Docker service status...
