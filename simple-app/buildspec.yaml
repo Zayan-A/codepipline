@@ -4,11 +4,11 @@ phases:
   install:
     commands:
       - echo Installing Docker...
-      - sudo yum update -y && sudo yum install -y docker
+      - sudo apt-get update -y && sudo apt-get install -y docker
       - docker --version || exit 1  # Check Docker version to confirm installation
 
       - echo Installing AWS CLI...
-      - sudo yum install -y aws-cli
+      - sudo apt-get install -y aws-cli
       - aws --version || exit 1  # Check AWS CLI version to confirm installation
 
       - echo Checking Docker service status...
