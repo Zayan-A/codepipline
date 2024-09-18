@@ -31,13 +31,13 @@ phases:
   post_build:
     commands:
       - echo Pushing the Docker image to ECR...
-      - docker tag moiz/project:latest 034362047502.dkr.ecr.us-east-1.amazonaws.com/moiz/project:latest
+      - docker tag moiz/project:latest 034362047502.dkr.ecr.us-east-1.amazonaws.com/moiz/project:v1
       - echo Checking images before push...
       - docker images || exit 1  # List images to confirm tagging
       - echo Pushing image...
       - |
         {
-          docker push 034362047502.dkr.ecr.us-east-1.amazonaws.com/moiz/project:latest
+          docker push 034362047502.dkr.ecr.us-east-1.amazonaws.com/moiz/project:v1
         } || {
           echo "Docker push failed. Check the error above."
           exit 1
