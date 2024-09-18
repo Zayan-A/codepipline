@@ -6,7 +6,7 @@ phases:
       - echo Installing Docker...
       - yum update -y && yum install -y docker
       - docker --version
-      - sudo service docker start
+      - service docker status
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
