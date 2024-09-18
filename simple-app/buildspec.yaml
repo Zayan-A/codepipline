@@ -5,34 +5,32 @@ phases:
     commands:
       - echo Installing Docker...
       - sudo yum update -y && sudo yum install -y docker
+      - sudo systemctl start docker  # Start Docker service if not running
       - docker --version
 
       - echo Installing AWS CLI...
-      # Install AWS CLI using package manager
       - sudo yum install -y aws-cli
-      # Verify AWS CLI installation
       - aws --version
 
   pre_build:
     commands:
       - echo Configuring AWS CLI...
-      # Set AWS region (adjust based on your region)
       - aws configure set region us-east-1
 
       - echo Logging in to Amazon ECR...
-      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 034362047502.dkr.ecr.us-east-1.amazonaws.com
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 034362047502.dkr.ecr.us-east-1.amazonaws.com || exit 1
       - echo Build started on `date`
 
   build:
     commands:
       - echo Building the Docker image...
-      - sudo docker build -t moiz/project simple-app/.
+      - sudo docker build -t moiz/project simple-app/. || exit 1
 
   post_build:
     commands:
       - echo Pushing the Docker image to ECR...
       - docker tag moiz/project:latest 034362047502.dkr.ecr.us-east-1.amazonaws.com/moiz/project:latest
-      - docker push 034362047502.dkr.ecr.us-east-1.amazonaws.com/moiz/project:latest
+      - docker push 034362047502.dkr.ecr.us-east-1.amazonaws.com/moiz/project:latest || exit 1
 
 artifacts:
   files:
