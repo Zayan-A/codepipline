@@ -5,13 +5,16 @@ phases:
     commands:
       - echo "Installing Docker..."
       - sudo apt-get update -y && sudo apt-get install -y docker.io
-      - sudo dockerd &  # Start Docker in the background directly
+      - sudo systemctl start docker 
       - sleep 10  # Wait for Docker to start
-      - docker --version || exit 1  # Check Docker version to confirm installation
+      - docker --version
 
       - echo "Installing AWS CLI..."
-      - sudo apt-get install -y awscli
-      - aws --version || exit 1  # Check AWS CLI version to confirm installation
+      - sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+      - sudo apt install unzip
+      - unzip awscliv2.zip
+      - sudo ./aws/install
+      - aws --version
 
   pre_build:
     commands:
